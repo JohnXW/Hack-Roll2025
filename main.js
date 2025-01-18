@@ -29,6 +29,11 @@ function searchNearbyPlaces(){
     outputted = false;
     document.getElementById("places").innerHTML='';
     let place = autocomplete.getPlace();
+    //Shifting center of the the graphic map to the input
+    let coorCenter = String(place.geometry.location.lat()+ ',' + place.geometry.location.lng());
+    document.getElementById("mapCenter").setAttribute('center', coorCenter);
+    document.getElementById("mapMarker1").setAttribute('position', coorCenter);
+    console.log("bruh",coorCenter);
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: place.geometry.location, 
@@ -60,7 +65,9 @@ function callback(results, status){
 }
 
 function createOutput(place){
-    console.log(place);
+    console.log(place.geometry.location.lat(), place.geometry.location.lng());
+    let coorMarker = String(place.geometry.location.lat()+ ',' + place.geometry.location.lng());
+    document.getElementById("mapMarker2").setAttribute('position', coorMarker);
     if(placesFound.length == 0){
         alert("Couldn't find any relevant place!");
         return
@@ -80,7 +87,7 @@ function createOutput(place){
             cell3.innerHTML = description;
         }
         else{
-            let photoUrl = "https://via.placeholder.come/150";
+            let photoUrl = "bruh.JPG";
             let cell2 = row.insertCell(1);
             cell2.innerHTML = `<img width="400" height="400" src="${photoUrl}"/>`
         }
