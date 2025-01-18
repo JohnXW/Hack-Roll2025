@@ -22,7 +22,7 @@
         <div class="form-group">
             <label for="location">Enter Location:</label>
             <br>
-            <input type="search" class="form-control" id="autocomplete" placeholder="location" autofocus>
+            <input type="search" class="form-control" id="autocomplete" placeholder="current location" autofocus>
         </div>
         <br>
 
@@ -39,40 +39,45 @@
 
         <br><br>
 
-        <table class="table table-bordered table-striped", id="places"></table>
+        <table class="table table-bordered table-striped" id="places" style="font-size:x-large;"></table>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
     </div>
 
-    <div class="wrapper">
+    <div class="wrapper" id="lucky" style="display: none">
         <div class="container2">
             <canvas id="wheel"></canvas>
             <button id="spin-btn">Spin</button>
             <img class="arrow" src="arrow.png" alt="spinner-arrow"/>
         </div>
-        <div id="final-value">
-            <p>Click On</p>
-        </div>
+        <!-- <div id="final-value">
+        </div> -->
     </div>
+
+    <div class="container" style="text-align: center; display: none; color: aliceblue" id="conclusion">
+        <h1>Hi</h1>
+    </div>
+    <br>
+
 
     <div class="container">
         <gmp-map id="mapCenter"
         center="1.2966, 103.7764"
-        zoom="15.5"
+        zoom="16"
         map-id="DEMO_MAP_ID"
-        style="height: 400px">
+        style="height: 450px">
         <gmp-advanced-marker id="mapMarker1"
-        position="1.347548,103.6800954"
+        position="1,1"
         title="Mountain View, CA"></gmp-advanced-marker>
         <gmp-advanced-marker id="mapMarker2"
-        position="1.347548,103.6800954"
+        position="1,1"
         title="Seattle, WA"
         background = "#000000"></gmp-advanced-marker>
     </gmp-map>
     </div>
 </body>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwK__qV83xVEGlQAFDwWmkj4ozQO0U60s&v=3.58.11a&loading=async&v=weekly&libraries=places,maps,marker&v=beta&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwK__qV83xVEGlQAFDwWmkj4ozQO0U60s&loading=async&libraries=places,maps,marker&v=beta&callback=initMap"></script>
 <script src="main.js"></script>
 </html>

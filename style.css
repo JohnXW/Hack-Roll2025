@@ -53,7 +53,7 @@
 
 body {
     height: 100vh;
-    transition: background-color 1s ease;
+    transition: background-color 1.5s ease;
 }
 
 .wrapper {
@@ -107,8 +107,8 @@ body {
 .arrow{
     position: absolute;
     width: 4em;
-    top: 45%;
-    right: -8%;
+    top: 42%;
+    right: -3%;
     max-width: 100%;
     height: auto;
 }

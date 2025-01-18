@@ -5,6 +5,7 @@ const PlaceTypesDict = {
     night: ["bar", "liquor_store"]
 }
 let placesFound = [];
+let finalPlacesFound = [];
 let currTypeSize = 0;
 let callbacks = 0; //used to track, so that it will only call createOutput when all types in placeTypes are appeneded
 console.log(PlaceTypesDict["food"]);
@@ -15,7 +16,7 @@ const wheel = document.getElementById("wheel");
 const spinBtn = document.getElementById("spin-btn")
 searchNearbyPlaces;
 const finalValue = document.getElementById("final-value");
-const rotationValues = [
+let rotationValues = [
     {minDegree: 0, maxDegree: 30, value: 2},
     {minDegree: 31, maxDegree: 90, value: 1},
     {minDegree: 91, maxDegree: 150, value: 6},
@@ -24,7 +25,7 @@ const rotationValues = [
     {minDegree: 271, maxDegree: 330, value: 3},
     {minDegree: 331, maxDegree: 360, value: 2},
 ];
-
+rotationValues[1].value = "hi";
 const data = [16, 16, 16, 16, 16, 16];
 var pieColors = [
     "#8b35bc",
@@ -59,7 +60,7 @@ let myChart = new Chart (wheel, {
                 color: "#000000",
                 formatter: (_, context) =>
                 context.chart.data.labels[context.dataIndex],
-                font: {size: 24},
+                font: {size: 35},
             },
         },
     },
@@ -67,7 +68,21 @@ let myChart = new Chart (wheel, {
 const valueGenerator = (angleValue) => {
     for (let i of rotationValues) {
         if (angleValue >= i.minDegree && angleValue <= i.maxDegree){
-            finalValue.innerHTML = `<p>Value: ${i.value}</p>`;
+            // finalValue.innerHTML = `<p>Value: ${i.value}</p>`;
+            document.getElementById("places").innerHTML='';
+            createOutput(i.value, true, 0);
+            let conclusionTxt = "You Gotten "+i.value.name+'!';
+            if(i.value.price_level){
+                let priceTxt = "";
+                if(i.value.price_level==1) priceTxt = "$1 - $10";
+                else if(i.value.price_level==2) priceTxt = "$11 - $20";
+                else priceTxt = "$21 - $30";
+                conclusionTxt = String(conclusionTxt) + '<br>' + priceTxt;
+            }
+            document.getElementById("lucky").setAttribute("style", "display: none");
+            document.getElementById("conclusion").setAttribute("style", "text-align: center; display: block; color: aliceblue");
+            conclusionTxt = '<h1>'+conclusionTxt+'</h1>';
+            document.getElementById("conclusion").innerHTML = conclusionTxt;
             spinBtn.disabled = false;
             break;
         }
@@ -78,7 +93,6 @@ let count = 0;
 let resultValue = 101;
 spinBtn.addEventListener("click", () => {
     spinBtn.disabled = true;
-    finalValue.innerHTML = `<p>Good Luck!</p>`;
     let randomDegree = Math.floor(Math.random() * (355-0+1)+0);
     let rotationInterval = window.setInterval(()=>{
         myChart.options.rotation = myChart.options.rotation + resultValue;
@@ -105,6 +119,8 @@ function initMap(){
 }
 
 function searchNearbyPlaces(){
+    document.getElementById("lucky").setAttribute("style", "display: none");
+    document.getElementById("conclusion").setAttribute("style", "text-align: center; display: none");
     let selectedPlaceType = document.getElementById("type").value;
     if(selectedPlaceType == "food") document.body.style.background = "#b7c6d5";
     else if(selectedPlaceType == "store") document.body.style.background = "#AA0000";
@@ -113,6 +129,7 @@ function searchNearbyPlaces(){
     currTypeSize = PlaceTypesDict[selectedPlaceType].length;
     callbacks = 0;
     placesFound = [];
+    finalPlacesFound = [];
     outputted = false;
     document.getElementById("places").innerHTML='';
     let place = autocomplete.getPlace();
@@ -124,14 +141,14 @@ function searchNearbyPlaces(){
 
     map = new google.maps.Map(document.getElementById('map'), {
         center: place.geometry.location, 
-        zoom: 15
+        zoom: 16
     });
 
     service = new google.maps.places.PlacesService(map);
     for(let type in PlaceTypesDict[selectedPlaceType]){
         service.nearbySearch({
             location: place.geometry.location,
-            radius: "500",
+            radius: "600",
             type: [PlaceTypesDict[selectedPlaceType][type]]
         }, callback);
     }
@@ -147,37 +164,75 @@ function callback(results, status){
     callbacks+=1;
     console.log("Total Places found: ", placesFound.length);
     if(callbacks == currTypeSize){
-        createOutput(placesFound[Math.floor(Math.random() * placesFound.length)]);
+        if(placesFound.length>=6){
+            for(let i=0; i<6; i++){
+                let picked = Math.floor(Math.random() * (placesFound.length-1));
+                let pickedPlace = placesFound[picked];
+                //Assigning place to wheel
+                if(i==0) rotationValues[1].value = pickedPlace;
+                else if(i==1){
+                    rotationValues[0].value = pickedPlace;
+                    rotationValues[6].value = pickedPlace;
+                }
+                else if(i==2) rotationValues[5].value = pickedPlace;
+                else if(i==3) rotationValues[4].value = pickedPlace;
+                else if(i==4) rotationValues[3].value = pickedPlace;
+                else if(i==5) rotationValues[2].value = pickedPlace;
+
+                rotationValues[i].value = placesFound[picked];
+                finalPlacesFound.push(placesFound[picked]);
+                createOutput(placesFound[picked], false, i+1);
+                placesFound.splice(picked, 1);
+            }
+            document.getElementById("lucky").setAttribute("style", "display: block");
+        }
+        else{
+            alert("Not Enough Elements To Create Wheel!");
+            for(let i=0; i<placesFound.length; i++){
+                createOutput(placesFound[i], true, i+1);
+            }
+        }
+        // createOutput(placesFound[Math.floor(Math.random() * placesFound.length)]);
     }
 }
 
-function createOutput(place){
-    console.log(place.geometry.location.lat(), place.geometry.location.lng());
-    let coorMarker = String(place.geometry.location.lat()+ ',' + place.geometry.location.lng());
-    document.getElementById("mapMarker2").setAttribute('position', coorMarker);
-    if(placesFound.length == 0){
-        alert("Couldn't find any relevant place!");
-        return
-    }
-    if(!outputted){
-        let table = document.getElementById("places");
-        let row = table.insertRow();
-        let cell1 = row.insertCell(0);
-        cell1.innerHTML = place.name;
-        if(place.photos && outputted===false){
+function createOutput(place, map, num){
+    let table = document.getElementById("places");
+    let row = table.insertRow();
+    if(map){
+        console.log(place.geometry.location.lat(), place.geometry.location.lng());
+        let coorMarker = String(place.geometry.location.lat()+ ',' + place.geometry.location.lng());
+        document.getElementById("mapMarker2").setAttribute('position', coorMarker);
+        let cell2 = row.insertCell(0);
+        let cell3 = row.insertCell(1);
+        if(place.photos){
             let photoUrl = place.photos[0].getUrl();
-            let rating = "Rating: ".concat(place.rating);
-            let description = rating.concat("\n\n", place.vicinity);
-            let cell2 = row.insertCell(1);
-            let cell3 = row.insertCell(2);
             cell2.innerHTML = `<img width="400" height="400" src="${photoUrl}"/>`
-            cell3.innerHTML = description;
         }
         else{
             let photoUrl = "bruh.JPG";
-            let cell2 = row.insertCell(1);
             cell2.innerHTML = `<img width="400" height="400" src="${photoUrl}"/>`
         }
+        let rating = "Rating: ".concat(place.rating);
+        let description = rating.concat("\n\n", place.vicinity);
+        cell3.innerHTML = description;
+    }
+    else{
+        let cell1 = row.insertCell(0);
+        cell1.innerHTML = num;
+        let cell2 = row.insertCell(1);
+        let cell3 = row.insertCell(2);
+        if(place.photos){
+            let photoUrl = place.photos[0].getUrl();
+            cell2.innerHTML = `<img width="400" height="400" src="${photoUrl}"/>`
+        }
+        else{
+            let photoUrl = "bruh.JPG";
+            cell2.innerHTML = `<img width="400" height="400" src="${photoUrl}"/>`
+        }
+        let rating = "Rating: ".concat(place.rating);
+        let description = rating.concat("\n\n", place.vicinity);
+        cell3.innerHTML = description;
     }
     outputted = true;
 }
