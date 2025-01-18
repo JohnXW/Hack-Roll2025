@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Random Place Picker</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body style="background-color:#b7c6d5;">
+<body style="background: linear-gradient(135deg, #c3a3f1, #6414e9);">
     <!-- <h1></h1> heading -->
     <br>
     <div class="typewriter">
@@ -40,19 +41,35 @@
 
         <table class="table table-bordered table-striped", id="places"></table>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.1.0/chartjs-plugin-datalabels.min.js"></script>
+    </div>
+
+    <div class="wrapper">
+        <div class="container2">
+            <canvas id="wheel"></canvas>
+            <button id="spin-btn">Spin</button>
+            <img class="arrow" src="arrow.png" alt="spinner-arrow"/>
+        </div>
+        <div id="final-value">
+            <p>Click On</p>
+        </div>
+    </div>
+
+    <div class="container">
         <gmp-map id="mapCenter"
-            center="1.2966, 103.7764"
-            zoom="15.5"
-            map-id="DEMO_MAP_ID"
-            style="height: 400px">
-            <gmp-advanced-marker id="mapMarker1"
-                position="1.347548,103.6800954"
-                title="Mountain View, CA"></gmp-advanced-marker>
-            <gmp-advanced-marker id="mapMarker2"
-                position="1.347548,103.6800954"
-                title="Seattle, WA"
-                background = "#000000"></gmp-advanced-marker>
-        </gmp-map>
+        center="1.2966, 103.7764"
+        zoom="15.5"
+        map-id="DEMO_MAP_ID"
+        style="height: 400px">
+        <gmp-advanced-marker id="mapMarker1"
+        position="1.347548,103.6800954"
+        title="Mountain View, CA"></gmp-advanced-marker>
+        <gmp-advanced-marker id="mapMarker2"
+        position="1.347548,103.6800954"
+        title="Seattle, WA"
+        background = "#000000"></gmp-advanced-marker>
+    </gmp-map>
     </div>
 </body>
 
