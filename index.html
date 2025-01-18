@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Place Picker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-color:#b7c6d5;">
+    <!-- <h1></h1> heading -->
+    <br>
+    <div class="typewriter">
+        <div>
+            <p>W Random Place Picker</p>
+        </div>
+    </div>
+    <div class="container">
+        <br><br>
+        <div id="map"></div>
+        <div class="form-group">
+            <label for="location">Enter Location:</label>
+            <br>
+            <input type="search" class="form-control" id="autocomplete" placeholder="location" autofocus>
+        </div>
+        <br>
+
+        <div class="form-group">
+            <label for="type">Select Place Type:</label>
+            <br>
+            <select class="form-control" name="" id="type">
+                <option value="food">Food Places</option>
+                <option value="store">Stores</option>
+                <option value="night">Night Events</option>
+                <!-- cafe meal_takeaway meal_delivery -->
+            </select>
+        </div>
+
+        <br><br>
+
+        <table class="table table-bordered table-striped", id="places"></table>
+    </div>
+</body>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBwK__qV83xVEGlQAFDwWmkj4ozQO0U60s&v=3.58.11a&loading=async&libraries=places&callback=initMap"></script>
+<!-- <script src="https://maps.googleapis.com/maps/api/place?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name,photos&key=AIzaSyBwK__qV83xVEGlQAFDwWmkj4ozQO0U60s"></script> -->
+<script src="main.js"></script>
+</html>
