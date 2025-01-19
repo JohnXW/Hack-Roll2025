@@ -1,8 +1,9 @@
 // main function
 const PlaceTypesDict = {
     food: ["cafe", "restaurant", "bakery"],
-    store: ["department_store", "convenience_store"],
-    night: ["bar", "liquor_store"]
+    store: ["department_store", "convenience_store", "supermarket"],
+    night: ["bar", "liquor_store", "casino"],
+    explore: ["zoo", "hindu_temple", "church", "museum"]
 }
 let placesFound = [];
 let finalPlacesFound = [];
@@ -25,7 +26,6 @@ let rotationValues = [
     {minDegree: 271, maxDegree: 330, value: 3},
     {minDegree: 331, maxDegree: 360, value: 2},
 ];
-rotationValues[1].value = "hi";
 const data = [16, 16, 16, 16, 16, 16];
 var pieColors = [
     "#8b35bc",
@@ -77,7 +77,7 @@ const valueGenerator = (angleValue) => {
                 if(i.value.price_level==1) priceTxt = "$1 - $10";
                 else if(i.value.price_level==2) priceTxt = "$11 - $20";
                 else priceTxt = "$21 - $30";
-                conclusionTxt = String(conclusionTxt) + '<br>' + priceTxt;
+                conclusionTxt = String(conclusionTxt) + '<br> Price Range: ' + priceTxt;
             }
             document.getElementById("lucky").setAttribute("style", "display: none");
             document.getElementById("conclusion").setAttribute("style", "text-align: center; display: block; color: aliceblue");
@@ -125,6 +125,7 @@ function searchNearbyPlaces(){
     if(selectedPlaceType == "food") document.body.style.background = "#b7c6d5";
     else if(selectedPlaceType == "store") document.body.style.background = "#AA0000";
     else if(selectedPlaceType == "night") document.body.style.background = "#000000";
+    else if(selectedPlaceType == "explore") document.body.style.background = "#123456";
 
     currTypeSize = PlaceTypesDict[selectedPlaceType].length;
     callbacks = 0;
